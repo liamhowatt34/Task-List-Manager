@@ -1,3 +1,5 @@
+// C++ to-do list organizer.
+
 #include <iostream>
 #include <string>
 #include <vector>
