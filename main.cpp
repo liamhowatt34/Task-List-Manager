@@ -1,7 +1,27 @@
+// To-Do List Orgainizer Main.
+
 #include <iostream>
+#include <limits>
 #include <string>
 #include <vector>
 using namespace std;
+
+int get_user_input() {
+    int value = 0;
+    bool valid_input = false;
+
+    while (!valid_input) {
+        if (cin >> value) {
+            valid_input = true;
+        } else {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid input. Please enter an integer." << endl;
+        }
+    }
+
+    return value;
+}
 
 int main() {
     vector<string> to_do_list;
@@ -13,13 +33,14 @@ int main() {
     int repeat = 0;
 
     while (taking_input) {
-        cout << "1. Enter a new task." << endl;
+        cout << "1. Enter a new task(s)." << endl;
         cout << "2. Display to do list." << endl;
-        cout << "3. Display completed task list." << endl;
-        cout << "4. Check-off a task." << endl;
+        cout << "3. Display completed task(s) list." << endl;
+        cout << "4. Mark a task as completed." << endl;
         cout << "5. Exit." << endl;
+
         cout << "Select an option: ";
-        cin >> menu_choice;
+        menu_choice = get_user_input();
 
         switch (menu_choice) {
             case 1:
@@ -29,19 +50,19 @@ int main() {
                 for (int i = 0; i < number_of_tasks; i++) {
                     string task = "";
                     cout << "Enter task #" << i + 1 << ": ";
-                    cin >> task;
+                    getline(cin, task);
                     to_do_list.push_back(task);
                 }
                 break;
             case 2:
-                cout << "To Do List: " << endl;
+                cout << "To-Do List: " << endl;
 
                 for (int i = 0; i < to_do_list.size(); i++) {
                     cout << i + 1 << ". " << to_do_list[i] << endl;
                 }
                 break;
             case 3:
-                cout << "Completed Tasks' List: " << endl;
+                cout << "Completed Tasks List: " << endl;
 
                 for (int i = 0; i < completed_list.size(); i++) {
                     cout << i + 1 << ". " << completed_list[i] << endl;
@@ -49,20 +70,28 @@ int main() {
 
                 break;
             case 4:
-                cout << "Enter a task number to complete: ";
+                cout << "To-Do List: " << endl;
+
+                for (int i = 0; i < to_do_list.size(); i++) {
+                    cout << i + 1 << ". " << to_do_list[i] << endl;
+                }
+
+                cout << "Enter a task # to mark completed: ";
                 cin >> completed_task_i;
 
                 if (completed_task_i > 0 &&
                     completed_task_i - 1 < to_do_list.size()) {
                     completed_list.push_back(to_do_list[completed_task_i - 1]);
-                    to_do_list.erase(to_do_list.begin() + completed_task_i + 1);
+                    to_do_list.erase(to_do_list.begin() + completed_task_i - 1);
                 }
                 break;
             case 5:
+                cout << "Exiting.." << endl;
                 break;
             default:
-                cout << "Invalid option.";
+                cout << "Invalid option." << endl;
         }
+        cout << endl;
         cout << "Enter 1 to do another operation/ Enter 2 to exit: ";
         cin >> repeat;
         switch (repeat) {
@@ -73,6 +102,7 @@ int main() {
                 taking_input = false;
                 break;
         }
+        cout << endl;
     }
     return 0;
 }
