@@ -7,34 +7,18 @@
 #include <vector>
 using namespace std;
 
+const int MENU_SIZE = 5;
 const int ADD_TASK = 1;
 const int DISPLAY_TODO = 2;
 const int DISPLAY_COMPLETED = 3;
 const int MARK_COMPLETED = 4;
 const int EXIT = 5;
 
-int get_menu_command() {
-    int value = 0;
-    while (true) {
-        vector<int> valids = {1, 2, 3, 4, 5};
-        cout << "Enter a number: ";
-        cin >> value;
-
-        for (int valid : valids) {
-            if (value == valid) {
-                return value;
-            }
-        }
-        cout << "Invalid input. Please enter a valid number." << endl;
-    }
-}
-
 int get_int() {
     int user_int = 0;
     string input;
 
     while (true) {
-        cout << "Enter a number: ";
         getline(cin, input);
 
         stringstream ss(input);
@@ -42,7 +26,7 @@ int get_int() {
             return user_int;
         } else {
             cout << "Error" << endl;
-            continue;
+            return -1;
         }
     }
 }
@@ -69,65 +53,76 @@ int main() {
         cout << "4. Mark a task as completed." << endl;
         cout << "5. Exit." << endl;
         cout << "Select an option: ";
-        menu_choice = get_menu_command();
+        menu_choice = get_int();
 
-        switch (menu_choice) {
-            case ADD_TASK:
-                cout << "Enter the number of tasks you want to add: ";
-                number_of_tasks = get_int();
+        if (menu_choice == -1) {
+            cout << "Error" << endl;
+            continue;
+        }
+        if (menu_choice < 1 && menu_choice > menu_choice) {
+            cout << "Error" << endl;
+        } else {
+            switch (menu_choice) {
+                case ADD_TASK:
+                    cout << "Enter the number of tasks you want to add: ";
+                    number_of_tasks = get_int();
 
-                for (int i = 0; i < number_of_tasks; i++) {
-                    string task = "";
-                    cout << "Enter task #" << i + 1 << ": ";
-                    getline(cin, task);
-                    to_do_list.push_back(task);
-                }
-                break;
-            case DISPLAY_TODO:
-                cout << "To-Do List: " << endl;
-                displayTaskList(to_do_list);
-                break;
-            case DISPLAY_COMPLETED:
-                cout << "Completed Tasks List: " << endl;
-                displayTaskList(completed_list);
-                break;
-            case MARK_COMPLETED:
-                cout << "To-Do List: " << endl;
-
-                displayTaskList(to_do_list);
-
-                cout << "Enter a task # to mark completed: ";
-                completed_task_i = get_int();
-
-                if (completed_task_i > 0 &&
-                    completed_task_i - 1 < to_do_list.size()) {
-                    completed_list.push_back(to_do_list[completed_task_i - 1]);
-                    to_do_list.erase(to_do_list.begin() + completed_task_i - 1);
+                    for (int i = 0; i < number_of_tasks; i++) {
+                        string task = "";
+                        cout << "Enter task #" << i + 1 << ": ";
+                        getline(cin, task);
+                        to_do_list.push_back(task);
+                    }
                     break;
-                } else {
+                case DISPLAY_TODO:
+                    cout << "To-Do List: " << endl;
+                    displayTaskList(to_do_list);
+                    break;
+                case DISPLAY_COMPLETED:
+                    cout << "Completed Tasks List: " << endl;
+                    displayTaskList(completed_list);
+                    break;
+                case MARK_COMPLETED:
+                    cout << "To-Do List: " << endl;
+
+                    displayTaskList(to_do_list);
+
+                    cout << "Enter a task # to mark completed: ";
+                    completed_task_i = get_int();
+
+                    if (completed_task_i > 0 &&
+                        completed_task_i - 1 < to_do_list.size()) {
+                        completed_list.push_back(
+                            to_do_list[completed_task_i - 1]);
+                        to_do_list.erase(to_do_list.begin() + completed_task_i -
+                                         1);
+                        break;
+                    } else {
+                        cout << "Invalid Input.." << endl;
+                        break;
+                    }
+                case EXIT:
+                    cout << "Exiting.." << endl;
+                    break;
+                default:
                     cout << "Invalid Input.." << endl;
+            }
+            cout << endl;
+            cout << "Enter 1 to do another operation/ Enter 2 to exit: ";
+            repeat = get_int();
+            switch (repeat) {
+                case 1:
+                    taking_input = true;
                     break;
-                }
-            case EXIT:
-                cout << "Exiting.." << endl;
-                break;
-            default:
-                cout << "Invalid Input.." << endl;
+                case 2:
+                    taking_input = false;
+                    break;
+                default:
+                    cout << "Invalid Input..";
+                    taking_input = false;
+            }
+            cout << endl;
         }
-        cout << endl;
-        cout << "Enter 1 to do another operation/ Enter 2 to exit: ";
-        repeat = get_int();
-        switch (repeat) {
-            case 1:
-                taking_input = true;
-                break;
-            case 2:
-                taking_input = false;
-                break;
-            default:
-                cout << "Invalid Input..";
-        }
-        cout << endl;
     }
     return 0;
 }
