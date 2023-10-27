@@ -2,25 +2,55 @@
 
 #include <iostream>
 #include <limits>
+#include <sstream>
 #include <string>
 #include <vector>
 using namespace std;
 
-int get_user_input() {
-    int value = 0;
-    bool valid_input = false;
+const int ADD_TASK = 1;
+const int DISPLAY_TODO = 2;
+const int DISPLAY_COMPLETED = 3;
+const int MARK_COMPLETED = 4;
+const int EXIT = 5;
 
-    while (!valid_input) {
-        if (cin >> value) {
-            valid_input = true;
+int get_menu_command() {
+    int value = 0;
+    while (true) {
+        vector<int> valids = {1, 2, 3, 4, 5};
+        cout << "Enter a number: ";
+        cin >> value;
+
+        for (int valid : valids) {
+            if (value == valid) {
+                return value;
+            }
+        }
+        cout << "Invalid input. Please enter a valid number." << endl;
+    }
+}
+
+int get_int() {
+    int user_int = 0;
+    string input;
+
+    while (true) {
+        cout << "Enter a number: ";
+        getline(cin, input);
+
+        stringstream ss(input);
+        if (ss >> user_int) {
+            return user_int;
         } else {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Invalid input. Please enter an integer." << endl;
+            cout << "Error" << endl;
+            continue;
         }
     }
+}
 
-    return value;
+void displayTaskList(const vector<string>& taskList) {
+    for (int i = 0; i < taskList.size(); i++) {
+        cout << i + 1 << ". " << taskList[i] << endl;
+    }
 }
 
 int main() {
@@ -38,14 +68,13 @@ int main() {
         cout << "3. Display completed task(s) list." << endl;
         cout << "4. Mark a task as completed." << endl;
         cout << "5. Exit." << endl;
-
         cout << "Select an option: ";
-        menu_choice = get_user_input();
+        menu_choice = get_menu_command();
 
         switch (menu_choice) {
-            case 1:
-                cout << "How many tasks do you want to enter? ";
-                cin >> number_of_tasks;
+            case ADD_TASK:
+                cout << "Enter the number of tasks you want to add: ";
+                number_of_tasks = get_int();
 
                 for (int i = 0; i < number_of_tasks; i++) {
                     string task = "";
@@ -54,46 +83,40 @@ int main() {
                     to_do_list.push_back(task);
                 }
                 break;
-            case 2:
+            case DISPLAY_TODO:
                 cout << "To-Do List: " << endl;
-
-                for (int i = 0; i < to_do_list.size(); i++) {
-                    cout << i + 1 << ". " << to_do_list[i] << endl;
-                }
+                displayTaskList(to_do_list);
                 break;
-            case 3:
+            case DISPLAY_COMPLETED:
                 cout << "Completed Tasks List: " << endl;
-
-                for (int i = 0; i < completed_list.size(); i++) {
-                    cout << i + 1 << ". " << completed_list[i] << endl;
-                }
-
+                displayTaskList(completed_list);
                 break;
-            case 4:
+            case MARK_COMPLETED:
                 cout << "To-Do List: " << endl;
 
-                for (int i = 0; i < to_do_list.size(); i++) {
-                    cout << i + 1 << ". " << to_do_list[i] << endl;
-                }
+                displayTaskList(to_do_list);
 
                 cout << "Enter a task # to mark completed: ";
-                cin >> completed_task_i;
+                completed_task_i = get_int();
 
                 if (completed_task_i > 0 &&
                     completed_task_i - 1 < to_do_list.size()) {
                     completed_list.push_back(to_do_list[completed_task_i - 1]);
                     to_do_list.erase(to_do_list.begin() + completed_task_i - 1);
+                    break;
+                } else {
+                    cout << "Invalid Input.." << endl;
+                    break;
                 }
-                break;
-            case 5:
+            case EXIT:
                 cout << "Exiting.." << endl;
                 break;
             default:
-                cout << "Invalid option." << endl;
+                cout << "Invalid Input.." << endl;
         }
         cout << endl;
         cout << "Enter 1 to do another operation/ Enter 2 to exit: ";
-        cin >> repeat;
+        repeat = get_int();
         switch (repeat) {
             case 1:
                 taking_input = true;
@@ -101,6 +124,8 @@ int main() {
             case 2:
                 taking_input = false;
                 break;
+            default:
+                cout << "Invalid Input..";
         }
         cout << endl;
     }
