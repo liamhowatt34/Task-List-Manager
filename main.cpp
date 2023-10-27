@@ -1,4 +1,4 @@
-// To-Do List Orgainizer Main.
+// Task List Manager Main.
 
 #include <iostream>
 #include <limits>
@@ -7,6 +7,7 @@
 #include <vector>
 using namespace std;
 
+// constants
 const int MENU_SIZE = 5;
 const int ADD_TASK = 1;
 const int DISPLAY_TODO = 2;
@@ -14,13 +15,13 @@ const int DISPLAY_COMPLETED = 3;
 const int MARK_COMPLETED = 4;
 const int EXIT = 5;
 
+// functions
 int get_int() {
     int user_int = 0;
     string input;
 
     while (true) {
         getline(cin, input);
-
         stringstream ss(input);
         if (ss >> user_int) {
             return user_int;
@@ -36,6 +37,7 @@ void displayTaskList(const vector<string> &taskList) {
     }
 }
 
+// main func
 int main() {
     vector<string> to_do_list;
     vector<string> completed_list;
@@ -44,12 +46,14 @@ int main() {
     int number_of_tasks = 0;
     int completed_task_i = 0;
 
+    // begin main loop
     while (taking_input) {
-        cout << "1. Enter a new task(s)." << endl;
-        cout << "2. Display to do list." << endl;
-        cout << "3. Display completed task(s) list." << endl;
-        cout << "4. Mark a task as completed." << endl;
-        cout << "5. Exit." << endl;
+        cout << ADD_TASK << ". Enter a new task(s)." << endl;
+        cout << DISPLAY_TODO << ". Display task list." << endl;
+        cout << DISPLAY_COMPLETED << ". Display completed task(s) list."
+             << endl;
+        cout << MARK_COMPLETED << ". Mark a task as completed." << endl;
+        cout << EXIT << ". Exit." << endl;
         cout << "Select an option: ";
         menu_choice = get_int();
         cout << endl;
@@ -67,7 +71,7 @@ int main() {
                 }
                 break;
             case DISPLAY_TODO:
-                cout << "To-Do List: " << endl;
+                cout << "Task List: " << endl;
                 displayTaskList(to_do_list);
                 break;
             case DISPLAY_COMPLETED:
@@ -75,24 +79,31 @@ int main() {
                 displayTaskList(completed_list);
                 break;
             case MARK_COMPLETED:
-                cout << "To-Do List: " << endl;
+                cout << "Task List: " << endl;
                 displayTaskList(to_do_list);
 
-                cout << "Enter a task # to mark completed: ";
-                completed_task_i = get_int();
-                cout << endl;
-
-                if (completed_task_i > 0 &&
-                    completed_task_i - 1 < to_do_list.size()) {
-                    completed_list.push_back(to_do_list[completed_task_i - 1]);
-                    to_do_list.erase(to_do_list.begin() + completed_task_i - 1);
+                if (to_do_list.size() < 1) {
+                    cout << "Task List is Empty." << endl;
                     break;
                 } else {
-                    cout << "Error. Enter a valid number." << endl;
-                    break;
+                    cout << "Enter a task # to mark completed: ";
+                    completed_task_i = get_int();
+                    cout << endl;
+
+                    if (completed_task_i > 0 &&
+                        completed_task_i - 1 < to_do_list.size()) {
+                        completed_list.push_back(
+                            to_do_list[completed_task_i - 1]);
+                        to_do_list.erase(to_do_list.begin() + completed_task_i -
+                                         1);
+                        break;
+                    } else {
+                        cout << "Error. Enter a valid number." << endl;
+                        break;
+                    }
                 }
             case EXIT:
-                cout << "Exiting.." << endl;
+                cout << "Exiting." << endl;
                 taking_input = false;
                 break;
             default:
