@@ -31,9 +31,9 @@ int get_int() {
     }
 }
 
-void displayTaskList(const vector<string> &taskList) {
-    for (int i = 0; i < taskList.size(); i++) {
-        cout << i + 1 << ". " << taskList[i] << endl;
+void displayTaskList(const vector<string> &task_list) {
+    for (int i = 0; i < task_list.size(); i++) {
+        cout << i + 1 << ". " << task_list[i] << endl;
     }
 }
 
@@ -63,6 +63,11 @@ int main() {
                 cout << "Enter the number of tasks you want to add: ";
                 number_of_tasks = get_int();
 
+                if (number_of_tasks <= 0) {
+                    cout << "Error. Enter a valid number." << endl;
+                    break;
+                }
+
                 for (int i = 0; i < number_of_tasks; i++) {
                     string task = "";
                     cout << "Enter task #" << i + 1 << ": ";
@@ -70,14 +75,17 @@ int main() {
                     to_do_list.push_back(task);
                 }
                 break;
+
             case DISPLAY_TODO:
                 cout << "Task List: " << endl;
                 displayTaskList(to_do_list);
                 break;
+
             case DISPLAY_COMPLETED:
                 cout << "Completed Tasks List: " << endl;
                 displayTaskList(completed_list);
                 break;
+
             case MARK_COMPLETED:
                 cout << "Task List: " << endl;
                 displayTaskList(to_do_list);
@@ -102,6 +110,7 @@ int main() {
                         break;
                     }
                 }
+
             case EXIT:
                 cout << "Exiting." << endl;
                 taking_input = false;
