@@ -64,6 +64,11 @@ int main() {
                 cout << "Enter the number of tasks you want to add: ";
                 number_of_tasks = get_int();
 
+                if (number_of_tasks <= 0) {
+                    cout << "Error. Enter a valid number." << endl;
+                    break;
+                }
+
                 for (int i = 0; i < number_of_tasks; i++) {
                     string task = "";
                     cout << "Enter task #" << i + 1 << ": ";
