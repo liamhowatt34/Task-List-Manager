@@ -1,5 +1,6 @@
 // Task List Manager Main.
-// Date: 10/29/23
+
+#include <sqlite3.h>
 
 #include <iostream>
 #include <limits>
@@ -14,7 +15,9 @@ const int ADD_TASK = 1;
 const int DISPLAY_TODO = 2;
 const int DISPLAY_COMPLETED = 3;
 const int MARK_COMPLETED = 4;
-const int EXIT = 5;
+const int DELETE_TASK = 5;
+const int CLEAR_COMPLETED_LIST = 6;
+const int EXIT = 7;
 
 // functions
 int get_int() {
@@ -46,6 +49,7 @@ int main() {
     int menu_choice = 0;
     int number_of_tasks = 0;
     int completed_task_i = 0;
+    int deleted_task_i = 0;
 
     // begin main loop
     while (taking_input) {
@@ -54,6 +58,8 @@ int main() {
         cout << DISPLAY_COMPLETED << ". Display completed task(s) list."
              << endl;
         cout << MARK_COMPLETED << ". Mark a task as completed." << endl;
+        cout << DELETE_TASK << ". Delete a task." << endl;
+        cout << CLEAR_COMPLETED_LIST << ". Clear completed task list." << endl;
         cout << EXIT << ". Exit." << endl;
         cout << "Select an option: ";
         menu_choice = get_int();
@@ -108,6 +114,33 @@ int main() {
                         break;
                     }
                 }
+            case DELETE_TASK:
+                cout << "Task List: " << endl;
+                displayTaskList(to_do_list);
+
+                if (to_do_list.size() < 1) {
+                    cout << "Task List is Empty." << endl;
+                    break;
+                } else {
+                    cout << "Enter a task # to delete from task list: ";
+                    deleted_task_i = get_int();
+                    cout << endl;
+
+                    if (deleted_task_i > 0 &&
+                        deleted_task_i - 1 < to_do_list.size()) {
+                        to_do_list.erase(to_do_list.begin() + deleted_task_i -
+                                         1);
+                        break;
+                    } else {
+                        cout << "Error. Enter a valid number." << endl;
+                        break;
+                    }
+                }
+            case CLEAR_COMPLETED_LIST:
+                completed_list.erase(completed_list.begin(),
+                                     completed_list.end());
+                cout << "Clearing completed list" << endl;
+                break;
             case EXIT:
                 cout << "Exiting." << endl;
                 taking_input = false;
