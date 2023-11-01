@@ -36,9 +36,66 @@ int get_int() {
     }
 }
 
+void add_task(std::vector<std::string>& task_list) {
+    std::cout << "Enter the number of tasks you want to add: ";
+    int number_of_tasks = get_int();
+
+    if (number_of_tasks <= 0) {
+        std::cout << "Error. Enter a valid number." << '\n';
+    }
+
+    for (int i = 0; i < number_of_tasks; i++) {
+        std::string task = "";
+        std::cout << "Enter task #" << i + 1 << ": ";
+        std::getline(std::cin, task);
+        task_list.push_back(task);
+    }
+}
+
 void display_task_list(const std::vector<std::string>& task_list) {
     for (int i = 0; i < task_list.size(); i++) {
         std::cout << i + 1 << ". " << task_list[i] << '\n';
+    }
+}
+
+void mark_completed(std::vector<std::string>& to_do_list,
+                    std::vector<std::string>& completed_list) {
+    std::cout << "Task List: " << '\n';
+    display_task_list(to_do_list);
+
+    if (to_do_list.size() < 1) {
+        std::cout << "Task List is Empty." << '\n';
+    } else {
+        std::cout << "Enter a task # to mark completed: ";
+        int completed_task_i = get_int();
+        std::cout << '\n';
+
+        if (completed_task_i > 0 && completed_task_i - 1 < to_do_list.size()) {
+            completed_list.push_back(to_do_list[completed_task_i - 1]);
+            to_do_list.erase(to_do_list.begin() + completed_task_i - 1);
+        } else {
+            std::cout << "Error. Enter a valid number." << '\n';
+        }
+    }
+}
+
+void delete_task(std::vector<std::string>& to_do_list) {
+    std::cout << "Task List: " << '\n';
+    display_task_list(to_do_list);
+
+    if (to_do_list.size() < 1) {
+        std::cout << "Task List is Empty." << '\n';
+    } else {
+        std::cout << "Enter a task # to delete from task list: ";
+        int deleted_task_i = get_int();
+        std::cout << '\n';
+
+        if (deleted_task_i > 0 && deleted_task_i - 1 < to_do_list.size()) {
+            to_do_list.erase(to_do_list.begin() + deleted_task_i - 1);
+
+        } else {
+            std::cout << "Error. Enter a valid number." << '\n';
+        }
     }
 }
 
@@ -48,9 +105,6 @@ int main() {
     std::vector<std::string> completed_list;
     bool taking_input = true;
     int menu_choice = 0;
-    int number_of_tasks = 0;
-    int completed_task_i = 0;
-    int deleted_task_i = 0;
 
     // begin main loop
     while (taking_input) {
@@ -63,27 +117,14 @@ int main() {
                   << '\n';
         std::cout << CLEAR_COMPLETED_LIST << ". Clear completed task list."
                   << '\n';
-        std::cout << EXIT << ". Exit." << '\n';
+        std::cout << EXIT << ". Exit app." << '\n';
         std::cout << "Select an option: ";
         menu_choice = get_int();
         std::cout << '\n';
 
         switch (menu_choice) {
             case ADD_TASK:
-                std::cout << "Enter the number of tasks you want to add: ";
-                number_of_tasks = get_int();
-
-                if (number_of_tasks <= 0) {
-                    std::cout << "Error. Enter a valid number." << '\n';
-                    break;
-                }
-
-                for (int i = 0; i < number_of_tasks; i++) {
-                    std::string task = "";
-                    std::cout << "Enter task #" << i + 1 << ": ";
-                    std::getline(std::cin, task);
-                    to_do_list.push_back(task);
-                }
+                add_task(to_do_list);
                 break;
             case DISPLAY_TODO:
                 std::cout << "Task List: " << '\n';
@@ -94,58 +135,17 @@ int main() {
                 display_task_list(completed_list);
                 break;
             case MARK_COMPLETED:
-                std::cout << "Task List: " << '\n';
-                display_task_list(to_do_list);
-
-                if (to_do_list.size() < 1) {
-                    std::cout << "Task List is Empty." << '\n';
-                    break;
-                } else {
-                    std::cout << "Enter a task # to mark completed: ";
-                    completed_task_i = get_int();
-                    std::cout << '\n';
-
-                    if (completed_task_i > 0 &&
-                        completed_task_i - 1 < to_do_list.size()) {
-                        completed_list.push_back(
-                            to_do_list[completed_task_i - 1]);
-                        to_do_list.erase(to_do_list.begin() + completed_task_i -
-                                         1);
-                        break;
-                    } else {
-                        std::cout << "Error. Enter a valid number." << '\n';
-                        break;
-                    }
-                }
+                mark_completed(to_do_list, completed_list);
+                break;
             case DELETE_TASK:
-                std::cout << "Task List: " << '\n';
-                display_task_list(to_do_list);
-
-                if (to_do_list.size() < 1) {
-                    std::cout << "Task List is Empty." << '\n';
-                    break;
-                } else {
-                    std::cout << "Enter a task # to delete from task list: ";
-                    deleted_task_i = get_int();
-                    std::cout << '\n';
-
-                    if (deleted_task_i > 0 &&
-                        deleted_task_i - 1 < to_do_list.size()) {
-                        to_do_list.erase(to_do_list.begin() + deleted_task_i -
-                                         1);
-                        break;
-                    } else {
-                        std::cout << "Error. Enter a valid number." << '\n';
-                        break;
-                    }
-                }
+                delete_task(to_do_list);
+                break;
             case CLEAR_COMPLETED_LIST:
-                completed_list.erase(completed_list.begin(),
-                                     completed_list.end());
+                completed_list.clear();
                 std::cout << "Clearing completed list." << '\n';
                 break;
             case EXIT:
-                std::cout << "Exiting." << '\n';
+                std::cout << "Exiting..." << '\n';
                 taking_input = false;
                 break;
             default:
