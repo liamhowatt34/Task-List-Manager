@@ -1,4 +1,4 @@
-// Task List Manager Main.
+// Task List Manager.
 
 #include <sqlite3.h>
 
@@ -21,6 +21,18 @@ enum MenuChoice {
 };
 
 // functions
+void display_menu() {
+    std::cout << ADD_TASK << ". Enter a new task(s)." << '\n';
+    std::cout << DISPLAY_TODO << ". Display task list." << '\n';
+    std::cout << DISPLAY_COMPLETED << ". Display completed task(s) list."
+              << '\n';
+    std::cout << MARK_COMPLETED << ". Mark a task as completed." << '\n';
+    std::cout << DELETE_TASK << ". Delete a task from the task list." << '\n';
+    std::cout << CLEAR_COMPLETED_LIST << ". Clear completed task list." << '\n';
+    std::cout << EXIT << ". Exit app." << '\n';
+    std::cout << "Select an option: ";
+}
+
 int get_int() {
     int user_int = 0;
     std::string input;
@@ -104,22 +116,11 @@ int main() {
     std::vector<std::string> to_do_list;
     std::vector<std::string> completed_list;
     bool taking_input = true;
-    int menu_choice = 0;
 
     // begin main loop
     while (taking_input) {
-        std::cout << ADD_TASK << ". Enter a new task(s)." << '\n';
-        std::cout << DISPLAY_TODO << ". Display task list." << '\n';
-        std::cout << DISPLAY_COMPLETED << ". Display completed task(s) list."
-                  << '\n';
-        std::cout << MARK_COMPLETED << ". Mark a task as completed." << '\n';
-        std::cout << DELETE_TASK << ". Delete a task from the task list."
-                  << '\n';
-        std::cout << CLEAR_COMPLETED_LIST << ". Clear completed task list."
-                  << '\n';
-        std::cout << EXIT << ". Exit app." << '\n';
-        std::cout << "Select an option: ";
-        menu_choice = get_int();
+        display_menu();
+        int menu_choice = get_int();
         std::cout << '\n';
 
         switch (menu_choice) {
