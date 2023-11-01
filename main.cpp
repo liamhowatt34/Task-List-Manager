@@ -10,13 +10,15 @@
 
 // constants
 const int MENU_SIZE = 5;
-const int ADD_TASK = 1;
-const int DISPLAY_TODO = 2;
-const int DISPLAY_COMPLETED = 3;
-const int MARK_COMPLETED = 4;
-const int DELETE_TASK = 5;
-const int CLEAR_COMPLETED_LIST = 6;
-const int EXIT = 7;
+enum MenuChoice {
+    ADD_TASK = 1,
+    DISPLAY_TODO,
+    DISPLAY_COMPLETED,
+    MARK_COMPLETED,
+    DELETE_TASK,
+    CLEAR_COMPLETED_LIST,
+    EXIT
+};
 
 // functions
 int get_int() {
@@ -34,13 +36,13 @@ int get_int() {
     }
 }
 
-void displayTaskList(const std::vector<std::string>& taskList) {
-    for (int i = 0; i < taskList.size(); i++) {
-        std::cout << i + 1 << ". " << taskList[i] << '\n';
+void display_task_list(const std::vector<std::string>& task_list) {
+    for (int i = 0; i < task_list.size(); i++) {
+        std::cout << i + 1 << ". " << task_list[i] << '\n';
     }
 }
 
-// main func
+// main function
 int main() {
     std::vector<std::string> to_do_list;
     std::vector<std::string> completed_list;
@@ -49,26 +51,6 @@ int main() {
     int number_of_tasks = 0;
     int completed_task_i = 0;
     int deleted_task_i = 0;
-
-    // opening a database connection to store to.
-    // sqlite3* database;
-    // int rc = sqlite3_open(
-    //     "todo.db",
-    //     &database);  // "todo.db" is the name of the SQLite database file.
-
-    // if (rc) {
-    //     cerr << "Can't open database: " << sqlite3_errmsg(database) << endl;
-    //     return 1;
-    // }
-
-    // const char* createTableSQL =
-    //     "CREATE TABLE IF NOT EXISTS tasks (id INTEGER PRIMARY KEY, task TEXT,
-    //     " "completed INTEGER)";
-    // rc = sqlite3_exec(database, createTableSQL, 0, 0, 0);
-
-    // if (rc) {
-    //     cerr << "SQL error: " << sqlite3_errmsg(database) << endl;
-    // }
 
     // begin main loop
     while (taking_input) {
@@ -105,15 +87,15 @@ int main() {
                 break;
             case DISPLAY_TODO:
                 std::cout << "Task List: " << '\n';
-                displayTaskList(to_do_list);
+                display_task_list(to_do_list);
                 break;
             case DISPLAY_COMPLETED:
                 std::cout << "Completed Tasks List: " << '\n';
-                displayTaskList(completed_list);
+                display_task_list(completed_list);
                 break;
             case MARK_COMPLETED:
                 std::cout << "Task List: " << '\n';
-                displayTaskList(to_do_list);
+                display_task_list(to_do_list);
 
                 if (to_do_list.size() < 1) {
                     std::cout << "Task List is Empty." << '\n';
@@ -137,7 +119,7 @@ int main() {
                 }
             case DELETE_TASK:
                 std::cout << "Task List: " << '\n';
-                displayTaskList(to_do_list);
+                display_task_list(to_do_list);
 
                 if (to_do_list.size() < 1) {
                     std::cout << "Task List is Empty." << '\n';
