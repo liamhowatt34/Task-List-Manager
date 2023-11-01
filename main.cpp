@@ -7,7 +7,6 @@
 #include <sstream>
 #include <string>
 #include <vector>
-using namespace std;
 
 // constants
 const int MENU_SIZE = 5;
@@ -22,11 +21,11 @@ const int EXIT = 7;
 // functions
 int get_int() {
     int user_int = 0;
-    string input;
+    std::string input;
 
     while (true) {
-        getline(cin, input);
-        stringstream ss(input);
+        std::getline(std::cin, input);
+        std::stringstream ss(input);
         if (ss >> user_int) {
             return user_int;
         } else {
@@ -35,72 +34,94 @@ int get_int() {
     }
 }
 
-void displayTaskList(const vector<string> &taskList) {
+void displayTaskList(const std::vector<std::string>& taskList) {
     for (int i = 0; i < taskList.size(); i++) {
-        cout << i + 1 << ". " << taskList[i] << endl;
+        std::cout << i + 1 << ". " << taskList[i] << '\n';
     }
 }
 
 // main func
 int main() {
-    vector<string> to_do_list;
-    vector<string> completed_list;
+    std::vector<std::string> to_do_list;
+    std::vector<std::string> completed_list;
     bool taking_input = true;
     int menu_choice = 0;
     int number_of_tasks = 0;
     int completed_task_i = 0;
     int deleted_task_i = 0;
 
+    // opening a database connection to store to.
+    // sqlite3* database;
+    // int rc = sqlite3_open(
+    //     "todo.db",
+    //     &database);  // "todo.db" is the name of the SQLite database file.
+
+    // if (rc) {
+    //     cerr << "Can't open database: " << sqlite3_errmsg(database) << endl;
+    //     return 1;
+    // }
+
+    // const char* createTableSQL =
+    //     "CREATE TABLE IF NOT EXISTS tasks (id INTEGER PRIMARY KEY, task TEXT,
+    //     " "completed INTEGER)";
+    // rc = sqlite3_exec(database, createTableSQL, 0, 0, 0);
+
+    // if (rc) {
+    //     cerr << "SQL error: " << sqlite3_errmsg(database) << endl;
+    // }
+
     // begin main loop
     while (taking_input) {
-        cout << ADD_TASK << ". Enter a new task(s)." << endl;
-        cout << DISPLAY_TODO << ". Display task list." << endl;
-        cout << DISPLAY_COMPLETED << ". Display completed task(s) list."
-             << endl;
-        cout << MARK_COMPLETED << ". Mark a task as completed." << endl;
-        cout << DELETE_TASK << ". Delete a task." << endl;
-        cout << CLEAR_COMPLETED_LIST << ". Clear completed task list." << endl;
-        cout << EXIT << ". Exit." << endl;
-        cout << "Select an option: ";
+        std::cout << ADD_TASK << ". Enter a new task(s)." << '\n';
+        std::cout << DISPLAY_TODO << ". Display task list." << '\n';
+        std::cout << DISPLAY_COMPLETED << ". Display completed task(s) list."
+                  << '\n';
+        std::cout << MARK_COMPLETED << ". Mark a task as completed." << '\n';
+        std::cout << DELETE_TASK << ". Delete a task from the task list."
+                  << '\n';
+        std::cout << CLEAR_COMPLETED_LIST << ". Clear completed task list."
+                  << '\n';
+        std::cout << EXIT << ". Exit." << '\n';
+        std::cout << "Select an option: ";
         menu_choice = get_int();
-        cout << endl;
+        std::cout << '\n';
 
         switch (menu_choice) {
             case ADD_TASK:
-                cout << "Enter the number of tasks you want to add: ";
+                std::cout << "Enter the number of tasks you want to add: ";
                 number_of_tasks = get_int();
 
                 if (number_of_tasks <= 0) {
-                    cout << "Error. Enter a valid number." << endl;
+                    std::cout << "Error. Enter a valid number." << '\n';
                     break;
                 }
 
                 for (int i = 0; i < number_of_tasks; i++) {
-                    string task = "";
-                    cout << "Enter task #" << i + 1 << ": ";
-                    getline(cin, task);
+                    std::string task = "";
+                    std::cout << "Enter task #" << i + 1 << ": ";
+                    std::getline(std::cin, task);
                     to_do_list.push_back(task);
                 }
                 break;
             case DISPLAY_TODO:
-                cout << "Task List: " << endl;
+                std::cout << "Task List: " << '\n';
                 displayTaskList(to_do_list);
                 break;
             case DISPLAY_COMPLETED:
-                cout << "Completed Tasks List: " << endl;
+                std::cout << "Completed Tasks List: " << '\n';
                 displayTaskList(completed_list);
                 break;
             case MARK_COMPLETED:
-                cout << "Task List: " << endl;
+                std::cout << "Task List: " << '\n';
                 displayTaskList(to_do_list);
 
                 if (to_do_list.size() < 1) {
-                    cout << "Task List is Empty." << endl;
+                    std::cout << "Task List is Empty." << '\n';
                     break;
                 } else {
-                    cout << "Enter a task # to mark completed: ";
+                    std::cout << "Enter a task # to mark completed: ";
                     completed_task_i = get_int();
-                    cout << endl;
+                    std::cout << '\n';
 
                     if (completed_task_i > 0 &&
                         completed_task_i - 1 < to_do_list.size()) {
@@ -110,21 +131,21 @@ int main() {
                                          1);
                         break;
                     } else {
-                        cout << "Error. Enter a valid number." << endl;
+                        std::cout << "Error. Enter a valid number." << '\n';
                         break;
                     }
                 }
             case DELETE_TASK:
-                cout << "Task List: " << endl;
+                std::cout << "Task List: " << '\n';
                 displayTaskList(to_do_list);
 
                 if (to_do_list.size() < 1) {
-                    cout << "Task List is Empty." << endl;
+                    std::cout << "Task List is Empty." << '\n';
                     break;
                 } else {
-                    cout << "Enter a task # to delete from task list: ";
+                    std::cout << "Enter a task # to delete from task list: ";
                     deleted_task_i = get_int();
-                    cout << endl;
+                    std::cout << '\n';
 
                     if (deleted_task_i > 0 &&
                         deleted_task_i - 1 < to_do_list.size()) {
@@ -132,23 +153,23 @@ int main() {
                                          1);
                         break;
                     } else {
-                        cout << "Error. Enter a valid number." << endl;
+                        std::cout << "Error. Enter a valid number." << '\n';
                         break;
                     }
                 }
             case CLEAR_COMPLETED_LIST:
                 completed_list.erase(completed_list.begin(),
                                      completed_list.end());
-                cout << "Clearing completed list" << endl;
+                std::cout << "Clearing completed list." << '\n';
                 break;
             case EXIT:
-                cout << "Exiting." << endl;
+                std::cout << "Exiting." << '\n';
                 taking_input = false;
                 break;
             default:
-                cout << "Error. Enter a valid number." << endl;
+                std::cout << "Error. Enter a valid number." << '\n';
         }
-        cout << endl;
+        std::cout << '\n';
     }
     return 0;
 }
